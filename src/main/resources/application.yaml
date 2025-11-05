@@ -1,15 +1,20 @@
 server:
-  port: 5002
+  port: ${SERVER_PORT:8080}
   servlet:
-    context-path: /profile
+    context-path: ${CONTEXT_PATH:/profile}
 
 spring:
   application:
-    name: profile-service
+    name: ${APP_NAME:profile-service}
   data:
     mongodb:
-      uri: mongodb://localhost:30000/clone-fb-profile-service?authSource=admin
+      uri: ${MONGODB_URI:mongodb://localhost:27017/clone-fb-profile-service?authSource=admin}
 
 app:
   services:
-    file: http://localhost:5004
+    file: ${FILE_SERVICE_URL:http://localhost:5004}
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL:INFO}
+    "[com.tam.profile]": ${LOGGING_LEVEL:INFO}
