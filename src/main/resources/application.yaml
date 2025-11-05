@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:5002}
   servlet:
     context-path: ${CONTEXT_PATH:/profile}
 

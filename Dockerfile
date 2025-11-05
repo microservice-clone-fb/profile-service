@@ -1,31 +1,36 @@
-# Build stage
+# =========================
+# 🔨 Build stage
+# =========================
 FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
-# Copy pom.xml and download dependencies (caching layer)
+# Copy pom.xml và tải dependencies trước (tối ưu cache)
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
-# Copy source code and build
+# Copy toàn bộ source code và build jar
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Runtime stage
+# =========================
+# 🚀 Runtime stage
+# =========================
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Add non-root user for security
+# Tạo user không phải root để tăng bảo mật
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
-# Copy jar from build stage
+# Copy file jar đã build từ stage trước
 COPY --from=build /app/target/*.jar app.jar
 
-# Render sẽ set PORT environment variable (default 10000)
-ENV PORT=8080
+# Render tự set biến PORT (thường là 10000)
+# Nếu chạy local thì fallback về 8080
+ENV PORT=${PORT:-8080}
 
-# Expose port (informational)
+# Expose port (thông tin cho Docker)
 EXPOSE ${PORT}
 
-# Run application với Render-compatible config
+# Chạy ứng dụng Spring Boot
 CMD ["sh", "-c", "java -jar app.jar --server.port=${PORT}"]
