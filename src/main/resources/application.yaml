@@ -1,0 +1,15 @@
+server:
+  port: 5002
+  servlet:
+    context-path: /profile
+
+spring:
+  application:
+    name: profile-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:30000/clone-fb-profile-service?authSource=admin
+
+app:
+  services:
+    file: http://localhost:5004
