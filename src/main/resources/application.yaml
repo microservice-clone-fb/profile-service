@@ -8,7 +8,7 @@ spring:
     name: ${APP_NAME:profile-service}
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/clone-fb-profile-service?authSource=admin}
+      uri: ${MONGODB_URI:mongodb+srv://admintam:21maichitam07@databaseparking2.2bt5tn6.mongodb.net/?appName=DatabaseParking2}
 
 app:
   services:
