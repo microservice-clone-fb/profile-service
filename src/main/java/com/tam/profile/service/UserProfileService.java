@@ -75,7 +75,7 @@ public class UserProfileService {
 
     public UserProfileResponse getByAnyField(String username) {
         UserProfile userProfile = userProfileRepository
-                .findByContactInfoEmailOrContactInfoPhoneNumber(username)
+                .findByEmailOrPhoneNumber(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_PROFILE_NOT_FOUND));
         return userProfileMapper.toUserProfileReponse(userProfile);
     }
@@ -106,7 +106,7 @@ public class UserProfileService {
         return userProfileMapper.toUserProfileReponse(userProfile);
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public List<UserProfileResponse> getAllProfiles() {
         var profiles = userProfileRepository.findAll();
 
@@ -154,11 +154,11 @@ public class UserProfileService {
 
             var response = fileClient.uploadMedia(file, avatarCreationRequest);
             log.info("Is uploaded: {}", response.getResult().getUrl());
-            //            profile.setAvatarId(response.getResult().getUrl());
-            //            profile.setOldImages(List.of(OldImageUploaded.builder()
-            //                    .id(profile.getAvatarId())
-            //                    //                            .imageType(profile.get)
-            //                    .build()));
+            // profile.setAvatarId(response.getResult().getUrl());
+            // profile.setOldImages(List.of(OldImageUploaded.builder()
+            // .id(profile.getAvatarId())
+            // // .imageType(profile.get)
+            // .build()));
 
             return userProfileMapper.toUserProfileReponse(userProfileRepository.save(profile));
         } catch (AppException e) {

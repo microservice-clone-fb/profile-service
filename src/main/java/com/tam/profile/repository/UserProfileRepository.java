@@ -10,8 +10,9 @@ import com.tam.profile.entity.UserProfile;
 @Repository
 public interface UserProfileRepository extends MongoRepository<UserProfile, String> {
     Optional<UserProfile> findByUserId(String userId);
-    //    List<UserProfile> findAllByUsernameLike(String username);
+
+    // List<UserProfile> findAllByUsernameLike(String username);
     Optional<UserProfile> findByContactInfoEmail(String email);
 
-    Optional<UserProfile> findByContactInfoEmailOrContactInfoPhoneNumber(String searchString);
+    Optional<UserProfile> findByEmailOrPhoneNumber(String searchString);
 }
