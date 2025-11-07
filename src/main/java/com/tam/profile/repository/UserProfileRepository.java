@@ -2,6 +2,7 @@ package com.tam.profile.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +15,6 @@ public interface UserProfileRepository extends MongoRepository<UserProfile, Stri
     // List<UserProfile> findAllByUsernameLike(String username);
     Optional<UserProfile> findByContactInfoEmail(String email);
 
+    @Query("{ $or: [ {'contactInfo.email': ?0}, {'contactInfo.phoneNumber': ?0} ] }")
     Optional<UserProfile> findByEmailOrPhoneNumber(String searchString);
 }
