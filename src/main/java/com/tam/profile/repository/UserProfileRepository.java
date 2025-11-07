@@ -2,8 +2,8 @@ package com.tam.profile.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.tam.profile.entity.UserProfile;
