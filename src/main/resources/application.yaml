@@ -1,20 +1,20 @@
 server:
-  port: ${SERVER_PORT:5002}
+  port: 5002
   servlet:
-    context-path: ${CONTEXT_PATH:/profile}
+    context-path: /profile
 
 spring:
   application:
-    name: ${APP_NAME:profile-service}
+    name: profile-service
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb+srv://admintam:21maichitam07@databaseparking2.2bt5tn6.mongodb.net/clone-fb-profile-service?appName=DatabaseParking2}
+      uri: mongodb://localhost:30000/clone-fb-profile-service?authSource=admin
 
 app:
   services:
-    file: ${FILE_SERVICE_URL:http://localhost:5004}
+    file: http://localhost:5004
 
 logging:
   level:
-    root: ${LOGGING_LEVEL:INFO}
-    "[com.tam.profile]": ${LOGGING_LEVEL:INFO}
+    root: INFO
+    "[com.tam.profile]": INFO
