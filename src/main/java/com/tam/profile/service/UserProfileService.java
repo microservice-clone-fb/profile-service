@@ -77,6 +77,7 @@ public class UserProfileService {
         UserProfile userProfile = userProfileRepository
                 .findByEmailOrPhoneNumber(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_PROFILE_NOT_FOUND));
+        log.info("Found user profile: {}", userProfile.toString());
         return userProfileMapper.toUserProfileReponse(userProfile);
     }
 
@@ -93,6 +94,7 @@ public class UserProfileService {
 
     // Giữ nguyên hàm updateAvatar để dùng sau
     public UserProfileResponse getByUserId(String userId) {
+        log.info("Getting profile for userId: {}", userId);
         UserProfile userProfile = userProfileRepository
                 .findByUserId(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_PROFILE_NOT_FOUND));

@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Document(collection = "user_profile_info")
+@Document(collection = "user-profile-info")
 public class UserProfile extends AuditableBaseDocument {
     @Id
     String id;
@@ -30,5 +30,7 @@ public class UserProfile extends AuditableBaseDocument {
     String type; // normal, famous, admin, enterprise
     String bio;
     ContactInfo contactInfo;
+    boolean professionalModeEnabled; // true = đang bật chế độ page chuyên nghiệp
+
     //    List<OldImageUploaded> oldImages;
 }

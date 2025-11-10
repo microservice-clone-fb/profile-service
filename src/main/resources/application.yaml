@@ -18,3 +18,4 @@ logging:
   level:
     root: INFO
     "[com.tam.profile]": INFO
+    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: ERROR
