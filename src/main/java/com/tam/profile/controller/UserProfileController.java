@@ -9,6 +9,7 @@ import com.tam.profile.dto.ApiResponse;
 import com.tam.profile.dto.request.SearchUserRequest;
 import com.tam.profile.dto.request.UpdateProfileRequest;
 import com.tam.profile.dto.response.UserProfileResponse;
+import com.tam.profile.dto.response.UserProfileWithRelationshipResponse;
 import com.tam.profile.service.UserProfileService;
 
 import lombok.AccessLevel;
@@ -25,6 +26,13 @@ public class UserProfileController {
     ApiResponse<UserProfileResponse> getProfile(@PathVariable String profileId) {
         return ApiResponse.<UserProfileResponse>builder()
                 .result(userProfileService.getProfile(profileId))
+                .build();
+    }
+
+    @GetMapping("/users/{profileId}/relationships")
+    ApiResponse<UserProfileWithRelationshipResponse> getProfileWithRelationships(@PathVariable String profileId) {
+        return ApiResponse.<UserProfileWithRelationshipResponse>builder()
+                .result(userProfileService.getProfileWithRelationships(profileId))
                 .build();
     }
 

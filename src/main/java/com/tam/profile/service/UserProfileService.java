@@ -11,12 +11,15 @@ import com.tam.profile.dto.request.SearchUserRequest;
 import com.tam.profile.dto.request.UpdateProfileRequest;
 import com.tam.profile.dto.request.UploadFileRequest;
 import com.tam.profile.dto.response.UserProfileResponse;
+import com.tam.profile.dto.response.UserProfileWithRelationshipResponse;
+import com.tam.profile.dto.response.relationship.RelationshipUserResponse;
 import com.tam.profile.entity.UserProfile;
 import com.tam.profile.exception.AppException;
 import com.tam.profile.exception.ErrorCode;
 import com.tam.profile.mapper.UserProfileMapper;
 import com.tam.profile.repository.UserProfileRepository;
 import com.tam.profile.repository.httpclient.FileClient;
+import com.tam.profile.repository.httpclient.RelationshipClient;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,7 @@ public class UserProfileService {
     UserProfileRepository userProfileRepository;
     UserProfileMapper userProfileMapper;
     FileClient fileClient;
+    RelationshipClient relationshipClient;
 
     public UserProfileResponse createProfile(ProfileCreationRequest request) {
         log.info("Creating profile for userId: {}", request.getUserId());
@@ -106,6 +110,18 @@ public class UserProfileService {
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_PROFILE_NOT_FOUND));
         return userProfileMapper.toUserProfileReponse(userProfile);
+    }
+
+    public UserProfileWithRelationshipResponse getProfileWithRelationships(String profileId) {
+        UserProfileResponse profile = getProfile(profileId);
+        RelationshipUserResponse relationships = relationshipClient
+                .getAllRelationship(profile.getUserId())
+                .getResult();
+
+        return UserProfileWithRelationshipResponse.builder()
+                .profile(profile)
+                .relationships(relationships)
+                .build();
     }
 
     // @PreAuthorize("hasRole('ADMIN')")
