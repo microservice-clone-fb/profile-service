@@ -12,4 +12,3 @@ public class UserProfileWithRelationshipResponse {
     UserProfileResponse profile;
     RelationshipUserResponse relationships;
 }
-

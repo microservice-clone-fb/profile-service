@@ -17,4 +17,3 @@ public interface RelationshipClient {
     @GetMapping("/users/all-relationship/{userId}")
     ApiResponse<RelationshipUserResponse> getAllRelationship(@PathVariable String userId);
 }
-

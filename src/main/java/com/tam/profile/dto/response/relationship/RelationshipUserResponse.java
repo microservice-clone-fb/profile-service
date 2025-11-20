@@ -21,4 +21,3 @@ public class RelationshipUserResponse {
     Set<String> incomingFriendRequests;
     Set<String> outgoingFriendRequests;
 }
-
