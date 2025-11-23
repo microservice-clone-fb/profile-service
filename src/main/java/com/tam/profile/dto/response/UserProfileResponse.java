@@ -2,6 +2,7 @@ package com.tam.profile.dto.response;
 
 import java.time.LocalDate;
 
+import com.tam.profile.dto.response.file.FileMnmt;
 import com.tam.profile.entity.ContactInfo;
 
 import lombok.*;
@@ -22,4 +23,5 @@ public class UserProfileResponse {
     LocalDate dateOfBirth;
     String bio;
     ContactInfo contactInfo;
+    FileMnmt fileMnmt;
 }

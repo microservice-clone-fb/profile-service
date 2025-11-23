@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tam.profile.configuration.UtilBean;
 import com.tam.profile.dto.request.ProfileCreationRequest;
 import com.tam.profile.dto.request.SearchUserRequest;
 import com.tam.profile.dto.request.UpdateProfileRequest;
@@ -36,6 +37,7 @@ public class UserProfileService {
     UserProfileMapper userProfileMapper;
     FileClient fileClient;
     RelationshipClient relationshipClient;
+    UtilBean utilBean;
 
     public UserProfileResponse createProfile(ProfileCreationRequest request) {
         log.info("Creating profile for userId: {}", request.getUserId());
@@ -251,10 +253,15 @@ public class UserProfileService {
             String keyword = request.getKeyword().trim();
             log.info("Searching for keyword: '{}' by user: {}", keyword, userId);
 
+            // check xem c phai uuid ko
+            boolean isUUID = utilBean.isUUID(keyword);
+
             // Use searchByName from repository (MongoDB query optimization)
             List<UserProfile> matchedProfiles;
             try {
-                matchedProfiles = userProfileRepository.searchByName(keyword);
+                matchedProfiles = isUUID
+                        ? List.of(userProfileRepository.findByUserId(keyword).get())
+                        : userProfileRepository.searchByName(keyword);
                 log.info(
                         "🔍 searchByName() called with keyword: '{}', result: {}",
                         keyword,
@@ -312,9 +319,20 @@ public class UserProfileService {
                 return List.of();
             }
 
-            return filteredProfiles.stream()
+            List<UserProfileResponse> userProfileResponseList = filteredProfiles.stream()
                     .map(userProfileMapper::toUserProfileReponse)
                     .toList();
+
+            return userProfileResponseList.stream()
+                    .map(user -> {
+                        var avatar = fileClient
+                                .getAllFileWithTypeAndUserId(user.getUserId(), "avatar")
+                                .getResult();
+                        user.setFileMnmt(avatar);
+                        return user;
+                    })
+                    .toList();
+
         } catch (Exception e) {
             log.error("❌ Unexpected error in search method: {}", e.getMessage(), e);
             return List.of();

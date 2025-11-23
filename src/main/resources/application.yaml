@@ -12,7 +12,7 @@ spring:
 
 app:
   services:
-    file: http://localhost:5004
+    file: http://localhost:5005/file
     relationship: http://localhost:5007/relationship
 
 logging:
