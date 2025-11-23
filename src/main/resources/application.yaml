@@ -13,6 +13,7 @@ spring:
 app:
   services:
     file: http://localhost:5004
+    relationship: http://localhost:5007/relationship
 
 logging:
   level:

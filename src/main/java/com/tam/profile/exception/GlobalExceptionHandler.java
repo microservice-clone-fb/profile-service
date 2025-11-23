@@ -3,6 +3,7 @@ package com.tam.profile.exception;
 import java.util.Map;
 import java.util.Objects;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.tam.profile.dto.ApiResponse;
 
@@ -21,9 +24,24 @@ public class GlobalExceptionHandler {
 
     private static final String MIN_ATTRIBUTE = "min";
 
+    private String getRequestPath() {
+        try {
+            ServletRequestAttributes attributes =
+                    (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attributes != null) {
+                HttpServletRequest request = attributes.getRequest();
+                return request.getMethod() + " " + request.getRequestURI() + "?" + request.getQueryString();
+            }
+        } catch (Exception e) {
+            // Ignore
+        }
+        return "Unknown";
+    }
+
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(Exception exception) {
-        log.error("Exception at handlingRuntimeException: ", exception);
+        String requestPath = getRequestPath();
+        log.error("❌ Exception at handlingRuntimeException - Request: {} - Error: ", requestPath, exception);
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
@@ -35,7 +53,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
-        log.warn("AppException at handlingAppException: {} - {}", errorCode.getCode(), errorCode.getMessage());
+        String requestPath = getRequestPath();
+
+        log.error(
+                "❌ AppException - Request: {} - Error: {} - {} - StackTrace: ",
+                requestPath,
+                errorCode.getCode(),
+                errorCode.getMessage(),
+                exception);
+
+        // Log stack trace để biết exception xảy ra ở đâu
+        StackTraceElement[] stackTrace = exception.getStackTrace();
+        if (stackTrace != null && stackTrace.length > 0) {
+            log.error(
+                    "📍 Exception location: {}:{} - Method: {}",
+                    stackTrace[0].getClassName(),
+                    stackTrace[0].getLineNumber(),
+                    stackTrace[0].getMethodName());
+        }
 
         ApiResponse apiResponse = new ApiResponse();
 
