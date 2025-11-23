@@ -1,4 +1,4 @@
-package com.tam.profile.dto.response;
+package com.tam.profile.dto.response.file;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
