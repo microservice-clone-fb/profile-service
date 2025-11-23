@@ -126,6 +126,11 @@ public class UserProfileService {
         return userProfileMapper.toUserProfileReponse(userProfile);
     }
 
+    public UserProfileResponse getByProfileId(String profileId) {
+        log.info("🔍 getByProfileId() called with profileId: {}", profileId);
+        return getProfile(profileId);
+    }
+
     public UserProfileWithRelationshipResponse getProfileWithRelationships(String profileId) {
         log.info("🔍 getProfileWithRelationships() called with profileId: {}", profileId);
         UserProfileResponse profile = getProfile(profileId);
