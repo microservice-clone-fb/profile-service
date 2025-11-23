@@ -25,13 +25,29 @@ import lombok.extern.slf4j.Slf4j;
 public class UserProfileController {
     UserProfileService userProfileService;
 
-    @GetMapping("/users/{profileId}")
-    ApiResponse<UserProfileResponse> getProfile(@PathVariable String profileId) {
-        log.info("🔍 GET /users/{} - Request to get profile by profileId", profileId);
+   @GetMapping("/users")
+ApiResponse<UserProfileResponse> getProfile(
+        @RequestParam(required = false) String userId,
+        @RequestParam(required = false) String profileId) {
+    
+    // Validate: phải có ít nhất 1 trong 2
+    if (userId == null && profileId == null) {
+        throw new IllegalArgumentException("Either userId or profileId must be provided");
+    }
+    
+    // Ưu tiên userId nếu có cả 2
+    if (userId != null) {
+        log.info("🔍 GET /users - Request to get profile by userId: {}", userId);
         return ApiResponse.<UserProfileResponse>builder()
-                .result(userProfileService.getProfile(profileId))
+                .result(userProfileService.getByUserId(userId))
                 .build();
     }
+    
+    log.info("🔍 GET /users - Request to get profile by profileId: {}", profileId);
+    return ApiResponse.<UserProfileResponse>builder()
+            .result(userProfileService.getByProfileId(profileId))
+            .build();
+}
 
     @GetMapping("/users/{profileId}/relationships")
     ApiResponse<UserProfileWithRelationshipResponse> getProfileWithRelationships(@PathVariable String profileId) {
