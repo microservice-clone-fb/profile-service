@@ -56,7 +56,7 @@ public class UserProfileController {
                 .build();
     }
 
-    @GetMapping("/users")
+    @GetMapping("/users/all")
     ApiResponse<List<UserProfileResponse>> getAllProfiles() {
         return ApiResponse.<List<UserProfileResponse>>builder()
                 .result(userProfileService.getAllProfiles())
